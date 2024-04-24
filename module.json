@@ -1,65 +1,53 @@
 {
-  "name":"My custom module",
-  "type":"OSC",
-  "path":"Custom",
-  
-  "version":"1.0.0",
-  "description":"My module description",
-  "url":"https://github.com/tommag/Sample-Chataigne-module",
-  "downloadURL":"https://github.com/tommag/Sample-Chataigne-module/archive/master.zip",
+  "name": "Shure SLX-D",
+  "type": "TCP Client",
+  "path": "Hardware",
 
-  "hasInput":true,
-  "hasOutput":true, 
+  "version": "0.0.1",
+  "description": "Monitor and Control Shure SLX-D wireless microphone receivers",
+  "url": "https://github.com/niklasberlin/Shure-SLXD-Chataigne-module",
+  "downloadURL": "https://github.com/niklasberlin/Shure-SLXD-Chataigne-module/archive/refs/heads/main.zip",
 
-  "hideDefaultCommands":false,
-  
-  "defaults":
-  {	
-    "autoAdd":false,
-    "oscInput":
-    {
-      "localPort":9001
+  "hasInput": true,
+  "hasOutput": true,
+
+  "hideDefaultCommands": true,
+
+  "defaults": {
+    "autoAdd": false,
+    "protocol": "Direct",
+    "output": {
+      "local": false,
+      "remotePort": 2202
     }
   },
 
-  "parameters":
-  {
-    "Module param":
-    {
-      "type":"Integer"
-    }
-  },
+  "parameters": {},
 
-  "hideDefaultParameters": [ "autoAdd", "oscInput/localPort"],
-
-  "scripts": 
-  [
-    "moduleScript.js"
+  "hideDefaultParameters": [
+    "autoAdd",
+    "protocol",
+    "messageStructure",
+    "customSeparator",
+    "firstValueIsTheName",
+    "output/local",
+    "output/remotePort"
   ],
 
-  "values":
-  {
-    "Module value":
-    {
-      "type":"Float"
-    }
-  },
+  "scripts": ["moduleScript.js"],
 
-  "commands":
-  {
-    
-    "Custom command":
-    {
-      "menu":"",  
-      "callback":"customCmd",
-      "parameters":
-      {
-        "Value":
-        {
-          "type":"Integer",
-          "min":0,
-          "max":100,
-          "default":0
+  "values": {},
+
+  "commands": {
+    "Custom command": {
+      "menu": "",
+      "callback": "customCmd",
+      "parameters": {
+        "Value": {
+          "type": "Integer",
+          "min": 0,
+          "max": 100,
+          "default": 0
         }
       }
     }
