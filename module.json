@@ -52,196 +52,195 @@
   "scripts": ["moduleScript.js"],
 
   "values": {
-    "Device":{
-      "type":"Container",
-      "collapsed":false,
-      "flashing":{
-        "type":"Boolean",
-        "default":false
+    "Device": {
+      "type": "Container",
+      "collapsed": false,
+      "flashing": {
+        "type": "Boolean",
+        "default": false
       },
-      "Modell Name":{
-        "type":"String",
-        "readOnly":true
+      "Modell Name": {
+        "type": "String",
+        "readOnly": true
       },
-      "Device ID":{
-        "type":"String"
+      "Device ID": {
+        "type": "String"
       },
-      "RF Band":{
-        "type":"String",
-        "readOnly":true
+      "RF Band": {
+        "type": "String",
+        "readOnly": true
       },
-      "Lock Status":{
-        "type":"Enum",
-        "options":{
-          "OFF":"OFF",
-          "MENU":"MENU",
-          "ALL":"ALL"
+      "Lock Status": {
+        "type": "Enum",
+        "options": {
+          "OFF": "OFF",
+          "MENU": "MENU",
+          "ALL": "ALL"
         },
-        "readOnly":true
+        "readOnly": true
       },
-      "FW Version":{
-        "type":"String",
-        "readOnly":true
+      "FW Version": {
+        "type": "String",
+        "readOnly": true
       }
     },
     "Channel 1": {
-      "type":"Container",
-      "collapsed":false,
-      "flashing":{
-        "type":"Boolean",
-        "default":false
+      "type": "Container",
+      "collapsed": false,
+      "flashing": {
+        "type": "Boolean",
+        "default": false
       },
-      "Name":{
-        "type":"String"
+      "Name": {
+        "type": "String"
       },
-      "Audio Gain":{
+      "Audio Gain": {
         "type": "Integer",
         "min": -18,
         "max": 42
       },
-      "Audio Level Switch":{
-        "type":"Enum",
-        "options":{
-          "MIC":"MIC",
-          "LINE":"LINE"
+      "Audio Level Switch": {
+        "type": "Enum",
+        "options": {
+          "MIC": "MIC",
+          "LINE": "LINE"
         },
-        "readOnly":true
+        "readOnly": true
       },
-      "Frequency":{
-        "type":"String",
-        "readOnly":true
+      "Frequency": {
+        "type": "String",
+        "readOnly": true
       },
-      "RF Group":{
-        "type":"Integer"
+      "RF Group": {
+        "type": "Integer"
       },
-      "RF Channel":{
-        "type":"Integer"
+      "RF Channel": {
+        "type": "Integer"
       },
-      "Audio Level Peak":{
-        "type":"Integer",
-        "min":-120,
-        "max":0,
-        "readOnly":true
+      "Audio Level Peak": {
+        "type": "Integer",
+        "min": -120,
+        "max": 0,
+        "readOnly": true
       },
-      "Audio Level RMS":{
-        "type":"Integer",
-        "min":-120,
-        "max":0,
-        "readOnly":true
+      "Audio Level RMS": {
+        "type": "Integer",
+        "min": -120,
+        "max": 0,
+        "readOnly": true
       },
-      "RSSI Ant A":{
-        "type":"Integer",
-        "min":-120,
-        "max":0,
-        "readOnly":true
+      "RSSI Ant A": {
+        "type": "Integer",
+        "min": -120,
+        "max": 0,
+        "readOnly": true
       },
-      "RSSI Ant B":{
-        "type":"Integer",
-        "min":-120,
-        "max":0,
-        "readOnly":true
+      "RSSI Ant B": {
+        "type": "Integer",
+        "min": -120,
+        "max": 0,
+        "readOnly": true
       },
-      "Transmitter Type":{
-        "type":"String",
-        "readOnly":true
+      "Transmitter Type": {
+        "type": "String",
+        "readOnly": true
       },
-      "Battery Runtime":{
-        "type":"String",
-        "readOnly":true
+      "Battery Runtime": {
+        "type": "String",
+        "readOnly": true
       },
-      "Battery Bars":{
-        "type":"Enum",
-        "options":{
-          "unknown":"255",
-          "5/5":"005",
-          "4/5":"004",
-          "3/5":"003",
-          "2/5":"002",
-          "1/5":"001",
-          "0/5":"000"
+      "Battery Bars": {
+        "type": "Enum",
+        "options": {
+          "unknown": "255",
+          "5/5": "005",
+          "4/5": "004",
+          "3/5": "003",
+          "2/5": "002",
+          "1/5": "001",
+          "0/5": "000"
         },
-        "readOnly":true
+        "readOnly": true
       }
     },
     "Channel 2": {
-      "type":"Container",
-      "collapsed":false,
-      "flashing":{
-        "type":"Boolean",
-        "default":false
+      "type": "Container",
+      "collapsed": false,
+      "flashing": {
+        "type": "Boolean",
+        "default": false
       },
-      "Name":{
-        "type":"String"
+      "Name": {
+        "type": "String"
       },
-      "Audio Gain":{
+      "Audio Gain": {
         "type": "Integer",
         "min": -18,
         "max": 42
       },
-      "Audio Level Switch":{
-        "type":"Enum",
-        "options":{
-          "MIC":"MIC",
-          "LINE":"LINE"
+      "Audio Level Switch": {
+        "type": "Enum",
+        "options": {
+          "MIC": "MIC",
+          "LINE": "LINE"
         },
-        "readOnly":true
+        "readOnly": true
       },
-      "Frequency":{
-        "type":"String",
-        "readOnly":true
+      "Frequency": {
+        "type": "String",
+        "readOnly": true
       },
-      "RF Group":{
-        "type":"Integer"
+      "RF Group": {
+        "type": "Integer"
       },
-      "RF Channel":{
-        "type":"Integer"
+      "RF Channel": {
+        "type": "Integer"
       },
-      "Audio Level Peak":{
-        "type":"Integer",
-        "min":-120,
-        "max":0,
-        "readOnly":true
+      "Audio Level Peak": {
+        "type": "Integer",
+        "min": -120,
+        "max": 0,
+        "readOnly": true
       },
-      "Audio Level RMS":{
-        "type":"Integer",
-        "min":-120,
-        "max":0,
-        "readOnly":true
+      "Audio Level RMS": {
+        "type": "Integer",
+        "min": -120,
+        "max": 0,
+        "readOnly": true
       },
-      "RSSI Ant A":{
-        "type":"Integer",
-        "min":-120,
-        "max":0,
-        "readOnly":true
+      "RSSI Ant A": {
+        "type": "Integer",
+        "min": -120,
+        "max": 0,
+        "readOnly": true
       },
-      "RSSI Ant B":{
-        "type":"Integer",
-        "min":-120,
-        "max":0,
-        "readOnly":true
+      "RSSI Ant B": {
+        "type": "Integer",
+        "min": -120,
+        "max": 0,
+        "readOnly": true
       },
-      "Transmitter Type":{
-        "type":"String",
-        "readOnly":true
+      "Transmitter Type": {
+        "type": "String",
+        "readOnly": true
       },
-      "Battery Runtime":{
-        "type":"String",
-        "readOnly":true
+      "Battery Runtime": {
+        "type": "String",
+        "readOnly": true
       },
-      "Battery Bars":{
-        "type":"Enum",
-        "options":{
-          "unknown":"255",
-          "5/5":"005",
-          "4/5":"004",
-          "3/5":"003",
-          "2/5":"002",
-          "1/5":"001",
-          "0/5":"000"
+      "Battery Bars": {
+        "type": "Enum",
+        "options": {
+          "unknown": "255",
+          "5/5": "005",
+          "4/5": "004",
+          "3/5": "003",
+          "2/5": "002",
+          "1/5": "001",
+          "0/5": "000"
         },
-        "readOnly":true
+        "readOnly": true
       }
-
     }
   },
 
