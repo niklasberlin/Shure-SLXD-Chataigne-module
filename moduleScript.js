@@ -185,7 +185,6 @@ function dataReceived(inputData) {
     } else if (parts[0] == "SAMPLE") {
       //this is sample Data
       //TODO: do something with it
-      script.log(parts);
       if(parts[2]=="ALL"){
         //Level Peak
         local.values
