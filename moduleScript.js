@@ -1,59 +1,161 @@
 function init() {
   script.log("Custom module init");
   //setup all value fields
-  
-  local.send("< GET 0 ALL >");
-  //Message received : < GET 0 ALL >< SET 0 METER_RATE 5000 > //companion init
-
+  getAll();
 }
 
-function dataReceived(data) {
+function dataReceived(inputData) {
+  script.log("INPUT DATA");
+  script.log(inputData);
+  script.log(" ");
   // example of incoming messages:
   // < REP x GROUP_CHANNEL {6,100} >  |  x is repolaced by the channel number
   // < REP x CHAN_NAME {yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy} >
   // < REP MODEL {SLXD4yyyyyyyyyyyyyyyyyyyyyyyyyyy} >
   // < SAMPLE 1 ALL 102 102 086 >
-  // Removing the surrounding "<" and ">"
-  trimmedStr = data.substring(2, data.length - 2);
+  // it is possible that we receive multiple messages in one data packet, we need to split them
 
-  // Splitting the string by spaces
-  parts = trimmedStr.split(" ");
-
-  // Extracting the values
-  msg = [
-    parts[0], 
-    parseInt(parts[1]), 
-  ];
-
-  if (parts.length > 4) {
-    msg.push(parts[2]);
-    if (msg[0] == "SAMPLE") {
-      for (i = 3; i < parts.length; i++) {
-        msg.push(parts[i]);
-      }
-    } else {
-      msg.push(
-        trimmedStr.substring(
-          trimmedStr.indexOf("{"),
-          trimmedStr.indexOf("}") + 1
-        )
-      ); 
+  splitData = inputData.split(">");
+  for (item = 0; item < splitData.length; item++) {
+    data = splitData[item];
+    script.log("single Line:    " + data);
+    // Removing the surrounding "<" and ">"
+    trimmedStr = data.substring(2, data.length - 1);
+    // remove possible string answers
+    if (trimmedStr.indexOf("{") > -1) {
+      string = trimmedStr.substring(
+        trimmedStr.indexOf("{"),
+        trimmedStr.indexOf("}") + 1
+      );
+      trimmedStr = trimmedStr.replace(string, "");
+      string = string.replace("{", "").replace("}", "");
+      script.log("String:    " + string);
     }
-  } else if (parts.length == 4) {
-    msg.push(parts[2]);
-    msg.push(parts[3]); 
-  }
 
-  if (msg[0] == "REP") {
-    //message is a return value from the receiver
-    //TODO: do something with it
-  } else if (msg[0] == "SAMPLE") {
-    //this is sample Data
-    //TODO: do something with it
-  }
+    // Splitting the string by spaces
+    parts = trimmedStr.split(" ");
+    script.log("Parts:    ");
+    script.log(parts);
+    script.log(" ");
 
-  script.log("PARSED MESSAGE");
-  script.log(msg);
+    if (parts[0] == "REP") {
+      //message is a return value from the receiver
+      //TODO: do something with it
+      //script.log(parts[2]);
+
+      //DEVICE INFOS
+      if (parts[1] == "MODEL") {
+        local.values.device.modellName.set(string);
+      }
+      if (parts[1] == "DEVICE_ID") {
+        local.values.device.deviceID.set(string);
+      }
+      if (parts[1] == "FW_VER") {
+        local.values.device.fwVersion.set(string);
+      }
+      if (parts[1] == "RF_BAND") {
+        local.values.device.rfBand.set(string);
+      }
+      if (parts[1] == "LOCK_STATUS") {
+        local.values.device.lockStatus.setData(parts[2]);
+      }
+      //CHANNEL INFOS
+      if (parts[2] == "CHAN_NAME") {
+        local.values
+          .getChild("channel" + parts[1])
+          .getChild("name")
+          .set(string);
+      }
+      if (parts[2] == "METER_RATE") {
+        //root.modules.shureSLX_D.parameters.updateRateCh1
+        local.parameters.getChild("updateRateCh" + parts[1]).set(parts[3]);
+      }
+      if (parts[2] == "GROUP_CHANNEL") {
+        grp_info = string.split(",");
+        //root.modules.shureSLX_D.values.channel1.rfGroup
+        if (grp_info[0] == "--"){
+          grp_info[0]=0;
+        }
+        if (grp_info[1] == "--"){
+          grp_info[1]=0;
+        }
+        local.values
+          .getChild("channel" + parts[1])
+          .rfGroup.set(parseInt(grp_info[0]));
+        local.values
+          .getChild("channel" + parts[1])
+          .rfChannel.set(parseInt(grp_info[1]));
+      }
+      if (parts[2] == "AUDIO_GAIN") {
+        //root.modules.shureSLX_D.parameters.updateRateCh1
+        local.values
+          .getChild("channel" + parts[1])
+          .audioGain.set(parseInt(parts[3]) - 14);
+      }
+      if (parts[2] == "AUDIO_LEVEL_RMS") {
+        local.values
+          .getChild("channel" + parts[1])
+          .audioLevelRMS.set(parseInt(parts[3]) - 120);
+      }
+      if (parts[2] == "AUDIO_LEVEL_PEAK") {
+        local.values
+          .getChild("channel" + parts[1])
+          .audioLevelPeak.set(parseInt(parts[3]) - 120);
+      }
+      if (parts[2] == "RSSI") {
+        //root.modules.shureSLX_D.values.channel1.rssiAntA
+        if (parts[1] == 1) {
+          local.values
+            .getChild("channel" + parts[1])
+            .rssiAntA.set(parseInt(parts[4]) - 120);
+        }else if(parts[1] == 2) {
+          local.values
+            .getChild("channel" + parts[1])
+            .rssiAntB.set(parseInt(parts[4]) - 120);
+        }
+      }
+      if (parts[2] == "AUDIO_LEVEL_PEAK") {
+        //root.modules.shureSLX_D.parameters.updateRateCh1
+        //root.modules.shureSLX_D.values.channel1.audioLevelRMS
+        local.values
+          .getChild("channel" + parts[1])
+          .audioLevelPeak.set(parseInt(parts[3]) - 120);
+      }
+      if (parts[2] == "TX_BATT_BARS") {
+        //root.modules.shureSLX_D.values.channel1.batteryBars
+        local.values
+          .getChild("channel" + parts[1])
+          .batteryBars.setData(parseInt(parts[3]));
+      }
+      if (parts[2] == "TX_MODEL") {
+        //root.modules.shureSLX_D.values.channel1.batteryBars
+        local.values
+          .getChild("channel" + parts[1])
+          .transmitterType.set(parts[3]);
+      }
+      if (parts[2] == "TX_BATT_MINS") {
+        //root.modules.shureSLX_D.values.channel1.batteryBars
+        mins = parseInt(parts[3]);
+        if(mins<=65532){
+          hrs = Math.floor(mins/60);
+          min = mins-hrs*60;
+          lbl = hrs+" hrs "+min+" min";
+        }else if(mins == 65533){
+          lbl = "Battery communication warning";
+        }else if(mins == 65534){
+          lbl = "Battery time calculating";
+        }else if(mins == 65535){
+          lbl = "UNKNOWN";
+        }
+        local.values
+          .getChild("channel" + parts[1])
+          .batteryRuntime.set(lbl);
+      }
+    } else if (parts[0] == "SAMPLE") {
+      //this is sample Data
+      //TODO: do something with it
+    }
+  }
 }
 
 function moduleParameterChanged(param) {
@@ -112,6 +214,11 @@ function requestChGroup(ch) {
 function requestChFreq(ch) {
   //< GET x FREQUENCY >
   local.send("< GET " + ch + " FREQUENCY >");
+}
+
+function getAll() {
+  local.send("< GET 0 ALL >");
+  //Message received : < GET 0 ALL >< SET 0 METER_RATE 5000 > //companion init
 }
 
 // This is the callback function for the "Custom command" command

@@ -23,7 +23,19 @@
   },
 
   "parameters": {
-    "Update Rate": {
+    "Update Rate Ch 1": {
+      "type": "Enum",
+      "description": "Select the Update Rate for constantly changing infos (RF Signal Level, Audio Signal Level)",
+      "options": {
+        "no Updates": "00000",
+        "very slow (15sec)": "15000",
+        "slow (5sec)": "05000",
+        "medium (2,5sec)": "02500",
+        "fast (1sec)": "01000",
+        "very fast (0.1sec)": "00100"
+      }
+    },
+    "Update Rate Ch 2": {
       "type": "Enum",
       "description": "Select the Update Rate for constantly changing infos (RF Signal Level, Audio Signal Level)",
       "options": {
