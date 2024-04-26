@@ -3,8 +3,8 @@
   "type": "TCP Client",
   "path": "Hardware",
 
-  "version": "0.0.1",
-  "description": "Monitor and Control Shure SLX-D wireless microphone receivers",
+  "version": "0.9.0",
+  "description": "BETA - Monitor and Control Shure SLX-D wireless microphone receivers",
   "url": "https://github.com/niklasberlin/Shure-SLXD-Chataigne-module",
   "downloadURL": "https://github.com/niklasberlin/Shure-SLXD-Chataigne-module/archive/refs/heads/main.zip",
 
@@ -124,10 +124,12 @@
         "readOnly": true
       },
       "RF Group": {
-        "type": "Integer"
+        "type": "Integer",
+        "readOnly": true
       },
       "RF Channel": {
-        "type": "Integer"
+        "type": "Integer",
+        "readOnly": true
       },
       "Audio Level Peak": {
         "type": "Integer",
@@ -203,10 +205,12 @@
         "readOnly": true
       },
       "RF Group": {
-        "type": "Integer"
+        "type": "Integer",
+        "readOnly": true
       },
       "RF Channel": {
-        "type": "Integer"
+        "type": "Integer",
+        "readOnly": true
       },
       "Audio Level Peak": {
         "type": "Integer",
@@ -257,15 +261,121 @@
   },
 
   "commands": {
-    "Custom command": {
+    "Flash receiver": {
       "menu": "",
-      "callback": "customCmd",
+      "callback": "setFlashing",
       "parameters": {
-        "Value": {
+        "Channel": {
           "type": "Integer",
           "min": 0,
-          "max": 100,
+          "max": 2,
+          "default": 0,
+          "description": "use 0 to flash the whole receiver"
+        }
+      }
+    },
+    "set Device Identifier": {
+      "menu": "",
+      "callback": "setDeviceID",
+      "parameters": {
+        "Identifier": {
+          "type": "String"
+        }
+      }
+    },
+    "set Channel Name": {
+      "menu": "",
+      "callback": "setChannelName",
+      "parameters": {
+        "Channel": {
+          "type": "Integer",
+          "min": 1,
+          "max": 2,
+          "default": 1
+        },
+        "new Name": {
+          "type": "String"
+        }
+      }
+    },
+    "set Audio Gain": {
+      "menu": "",
+      "callback": "setAudioGain",
+      "parameters": {
+        "Channel": {
+          "type": "Integer",
+          "min": 1,
+          "max": 2,
+          "default": 1
+        },
+        "Gain": {
+          "type": "Integer",
+          "min": -18,
+          "max": 42,
           "default": 0
+        }
+      }
+    },
+    "increase Audio Gain": {
+      "menu": "",
+      "callback": "incAudioGain",
+      "parameters": {
+        "Channel": {
+          "type": "Integer",
+          "min": 1,
+          "max": 2,
+          "default": 1
+        },
+        "Gain increase": {
+          "type": "Integer",
+          "min": 0,
+          "max": 10,
+          "default": 1
+        }
+      }
+    },
+    "decrease Audio Gain": {
+      "menu": "",
+      "callback": "decAudioGain",
+      "parameters": {
+        "Channel": {
+          "type": "Integer",
+          "min": 1,
+          "max": 2,
+          "default": 1
+        },
+        "Gain reduction": {
+          "type": "Integer",
+          "min": 0,
+          "max": 10,
+          "default": 1
+        }
+      }
+    },
+    "Update all Values": {
+      "menu": "",
+      "callback": "getAll"
+    },
+    "Set Meter Rate": {
+      "menu": "",
+      "callback": "setMeterRate",
+      "parameters": {
+        "Channel": {
+          "type": "Integer",
+          "min": 1,
+          "max": 2,
+          "default": 1
+        },
+        "Rate": {
+          "type": "Enum",
+          "options": {
+            "no Updates": "00000",
+            "very slow (15sec)": "15000",
+            "slow (5sec)": "05000",
+            "medium (2,5sec)": "02500",
+            "fast (1sec)": "01000",
+            "very fast (0.1sec)": "00100"
+          }
         }
       }
     }
