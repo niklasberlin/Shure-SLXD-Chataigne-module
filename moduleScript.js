@@ -11,7 +11,6 @@ function init() {
 }
 
 function update(delta){
-  script.log("UPDATE LOOP");
   if (local.values.device.flashing.get()){
     device_flashtime +=1;
     if (device_flashtime >= flashtime){
@@ -269,8 +268,8 @@ function moduleParameterChanged(param) {
 }
 
 function moduleValueChanged(value) {
-  script.log(value.name + " value changed, new value: " + value.get());
-  script.log("parent element: " + value.getParent().name);
+  //script.log(value.name + " value changed, new value: " + value.get());
+  //script.log("parent element: " + value.getParent().name);
   if (value.getParent().name == "device") {
     if (value.name == "flashing" && value.get() == 1) {
       setFlashing(0);
@@ -390,7 +389,6 @@ function decAudioGain(ch, addgain) {
 }
 
 function setMeterRate(ch, rate) {
-  script.log("Function setMeterRate called with ch: "+ch+" | rate: "+rate);
   rate = toInt(rate);
   //< SET x METER_RATE 01000 >
   if ((ch == 1 || ch == 2) && ((rate >= 100 && rate <= 65535) || rate == 0)) {
