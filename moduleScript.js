@@ -4,7 +4,6 @@ var channel_1_flashtime = 0;
 var channel_2_flashtime = 0;
 var todo = false;
 var last_received = {};
-last_received_AGainCh1 = 0;
 
 function init() {
   script.setUpdateRate(2);
@@ -89,6 +88,7 @@ function dataReceived(inputData) {
       }
       if (parts[1] == "DEVICE_ID") {
         local.values.device.deviceID.set(string);
+        last_received["deviceID"] = util.getTime();
       }
       if (parts[1] == "FW_VER") {
         local.values.device.fwVersion.set(string);
@@ -115,6 +115,8 @@ function dataReceived(inputData) {
         }
       }
       if (parts[2] == "CHAN_NAME") {
+        key = "channel" + parts[1] + ".name";
+        last_received[key] = util.getTime();
         local.values
           .getChild("channel" + parts[1])
           .getChild("name")
@@ -145,8 +147,8 @@ function dataReceived(inputData) {
           parts[3] = parts[3].substring(1, parts[3].length);
         }
         //root.modules.shureSLX_D.parameters.updateRateCh1
-        last_received_AGainCh1 = util.getTime();
-        script.log("TIME: " + last_received_AGainCh1);
+        key = "channel" + parts[1] + ".audioGain";
+        last_received[key] = util.getTime();
         local.values
           .getChild("channel" + parts[1])
           .audioGain.set(parseInt(parts[3]) - 18);
@@ -262,10 +264,13 @@ function moduleValueChanged(value) {
   //script.log("parent element: " + value.getParent().name);
   if (value.getParent().name == "device") {
     if (value.name == "flashing" && value.get() == 1) {
-      setFlashing(0);
+      setFlashing(0); //flash channel 0 aka device
     }
     if (value.name == "deviceID") {
-      setDeviceID(value.get());
+      key = "deviceID";
+      if (last_received[key] < util.getTime() - 0.5) {
+        setDeviceID(value.get());
+      }
     }
   }
   if (value.getParent().name.substring(0, 7) == "channel") {
@@ -274,12 +279,14 @@ function moduleValueChanged(value) {
       setFlashing(channel);
     }
     if (value.name == "name") {
-      setChannelName(channel, value.get());
+      key = "channel" + channel + ".name";
+      if (last_received[key] < util.getTime() - 0.5) {
+        setChannelName(channel, value.get());
+      }
     }
     if (value.name == "audioGain") {
-      //AGainchannel1
-      last_time = last_received_AGainCh1;
-      if (last_time < util.getTime() - 0.5) {
+      key = "channel" + channel + ".audioGain";
+      if (last_received[key] < util.getTime() - 0.5) {
         //only send a message when we have not received a value in a while
         setAudioGain(channel, value.get());
       }
