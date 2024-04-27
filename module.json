@@ -143,13 +143,7 @@
         "max": 0,
         "readOnly": true
       },
-      "RSSI Ant A": {
-        "type": "Integer",
-        "min": -120,
-        "max": 0,
-        "readOnly": true
-      },
-      "RSSI Ant B": {
+      "RSSI Ant": {
         "type": "Integer",
         "min": -120,
         "max": 0,
@@ -224,13 +218,7 @@
         "max": 0,
         "readOnly": true
       },
-      "RSSI Ant A": {
-        "type": "Integer",
-        "min": -120,
-        "max": 0,
-        "readOnly": true
-      },
-      "RSSI Ant B": {
+      "RSSI Ant": {
         "type": "Integer",
         "min": -120,
         "max": 0,

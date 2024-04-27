@@ -1,39 +1,39 @@
-var flashtime = 4;  //time the flashing indicator stays lit
+var flashtime = 2.5; //time the flashing indicator stays lit
 var device_flashtime = 0;
 var channel_1_flashtime = 0;
 var channel_2_flashtime = 0;
 var todo = false;
+var last_received = {};
+last_received_AGainCh1 = 0;
 
 function init() {
-  script.setUpdateRate(1);
+  script.setUpdateRate(2);
   //request all value fields
   getAll();
 }
 
-function update(delta){
-  if (local.values.device.flashing.get()){
-    device_flashtime +=1;
-    if (device_flashtime >= flashtime){
+function update(delta) {
+  if (local.values.device.flashing.get()) {
+    device_flashtime += 0.5;
+    if (device_flashtime >= flashtime) {
       device_flashtime = 0;
       local.values.device.flashing.set(0);
     }
   }
-  if (local.values.channel1.flashing.get()){
-    channel_1_flashtime +=1;
-    if (channel_1_flashtime >= flashtime){
+  if (local.values.channel1.flashing.get()) {
+    channel_1_flashtime += 0.5;
+    if (channel_1_flashtime >= flashtime) {
       channel_1_flashtime = 0;
       local.values.channel1.flashing.set(0);
     }
   }
-  if (local.values.channel2.flashing.get()){
-    channel_2_flashtime +=1;
-    if (channel_2_flashtime >= flashtime){
+  if (local.values.channel2.flashing.get()) {
+    channel_2_flashtime += 0.5;
+    if (channel_2_flashtime >= flashtime) {
       channel_2_flashtime = 0;
       local.values.channel2.flashing.set(0);
     }
   }
-
-
 }
 
 function toInt(input) {
@@ -145,6 +145,8 @@ function dataReceived(inputData) {
           parts[3] = parts[3].substring(1, parts[3].length);
         }
         //root.modules.shureSLX_D.parameters.updateRateCh1
+        last_received_AGainCh1 = util.getTime();
+        script.log("TIME: " + last_received_AGainCh1);
         local.values
           .getChild("channel" + parts[1])
           .audioGain.set(parseInt(parts[3]) - 18);
@@ -161,15 +163,9 @@ function dataReceived(inputData) {
       }
       if (parts[2] == "RSSI") {
         //root.modules.shureSLX_D.values.channel1.rssiAntA
-        if (parts[1] == 1) {
-          local.values
-            .getChild("channel" + parts[1])
-            .rssiAntA.set(parseInt(parts[4]) - 120);
-        } else if (parts[1] == 2) {
-          local.values
-            .getChild("channel" + parts[1])
-            .rssiAntB.set(parseInt(parts[4]) - 120);
-        }
+        local.values
+          .getChild("channel" + parts[1])
+          .rssiAnt.set(parseInt(parts[4]) - 120);
       }
       if (parts[2] == "AUDIO_LEVEL_PEAK") {
         //root.modules.shureSLX_D.parameters.updateRateCh1
@@ -239,15 +235,9 @@ function dataReceived(inputData) {
           .getChild("channel" + parts[1])
           .audioLevelRMS.set(parseInt(parts[4]) - 120);
         //RSSI
-        if (parts[1] == 1) {
-          local.values
-            .getChild("channel" + parts[1])
-            .rssiAntA.set(parseInt(parts[5]) - 120);
-        } else if (parts[1] == 2) {
-          local.values
-            .getChild("channel" + parts[1])
-            .rssiAntB.set(parseInt(parts[5]) - 120);
-        }
+        local.values
+          .getChild("channel" + parts[1])
+          .rssiAnt.set(parseInt(parts[5]) - 120);
       }
     }
   }
@@ -260,10 +250,10 @@ function moduleParameterChanged(param) {
     getAll();
   }
   if (param.name == "updateRateCh1") {
-    setMeterRate(1, toInt(param.get()));
+    setMeterRate(1, param.get());
   }
   if (param.name == "updateRateCh2") {
-    setMeterRate(2, toInt(param.get()));
+    setMeterRate(2, param.get());
   }
 }
 
@@ -287,7 +277,12 @@ function moduleValueChanged(value) {
       setChannelName(channel, value.get());
     }
     if (value.name == "audioGain") {
-      setAudioGain(channel, value.get());
+      //AGainchannel1
+      last_time = last_received_AGainCh1;
+      if (last_time < util.getTime() - 0.5) {
+        //only send a message when we have not received a value in a while
+        setAudioGain(channel, value.get());
+      }
     }
   }
 }
